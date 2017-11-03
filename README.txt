@@ -1,3 +1,3 @@
 Hello World!
 
-good good learn and day day up!
+Good good learn and day day up!
