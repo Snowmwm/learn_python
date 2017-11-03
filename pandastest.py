@@ -3,7 +3,6 @@
 
 import numpy as np
 import pandas as pd
-
 '''
 myarray = np.array([1, 2, 3])
 index = ['a', 'b', 'c']
