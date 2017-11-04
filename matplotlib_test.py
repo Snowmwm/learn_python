@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#可视化数据
 
 from pandas import read_csv
 import matplotlib.pyplot as plt
 import numpy as np
 from pandas.plotting import scatter_matrix
+
 '''
 myarray = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]])#定义绘图的数据
 plt.plot(myarray)#初始化绘图
