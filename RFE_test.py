@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#递归特征消除
 
 from pandas import read_csv
 from sklearn.feature_selection import RFE

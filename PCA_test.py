@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#主要成分分析
 
 from pandas import read_csv
 from sklearn.decomposition import PCA
