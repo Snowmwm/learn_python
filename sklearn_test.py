@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#数据预处理
 
 from pandas import read_csv
 import numpy as np
