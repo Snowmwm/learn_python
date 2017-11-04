@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#卡方检验
 
 from pandas import read_csv
 from numpy import set_printoptions

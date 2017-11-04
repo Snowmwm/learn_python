@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#袋装决策树算法
 
 from pandas import read_csv
 from sklearn.ensemble import ExtraTreesClassifier
