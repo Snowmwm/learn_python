@@ -1,10 +1,12 @@
 *.png
 *.jpg
-test.db
+*.csv
+
+__pycache__/
 templates/
+
+test.db
 sina.html
 readtest.txt
 hello.html
 dumptest.txt
-__pycache__/
-pima-indians-diabetes.data.csv
