@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#分离训练数据集和评估数据集
+
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+#导入数据
+filename = 'pima-indians-diabetes.data.csv'
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+data = read_csv(filename, names = names)
+
+#将数据分为输入数据和输出结果
+array = data.values
+X = array[:, 0:8]
+Y = array[:, 8]
+
+test_size = 0.3
+seed = 4
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = test_size, random_state = seed)
+model = LogisticRegression()
+model.fit(X_train, Y_train)
+result = model.score(X_test, Y_test)
+print('算法评估结果: %.3f%%' % (result * 100))
