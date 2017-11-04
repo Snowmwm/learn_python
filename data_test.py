@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#导入与查看数据
 
 from pandas import read_csv, set_option
 #使用pandas导入CSV数据
