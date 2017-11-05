@@ -1,12 +1,11 @@
 *.png
 *.jpg
 *.csv
+*.txt
 
 __pycache__/
 templates/
 
 test.db
 sina.html
-readtest.txt
 hello.html
-dumptest.txt
