@@ -16,7 +16,8 @@ print(peek)
 #将数据分为输入数据和输出结果
 array = data.values
 X = array[:, 8:]
-Y = array[:, 7]
+Y = array[:, 6]
+
 
 #K折交叉验证分离
 num_folds = 10
