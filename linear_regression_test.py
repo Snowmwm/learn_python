@@ -19,7 +19,7 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#线性回归算法
+#线性回归
 model = LinearRegression()
 
 #平均绝对误差
