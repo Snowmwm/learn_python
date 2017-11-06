@@ -8,24 +8,21 @@ from sklearn.linear_model import LinearRegression
 #导入数据
 filename = 'housing.csv'
 data = read_csv(filename)
-'''
-print('\n查看前10行：')
-peek = data.head(10)
-print(peek)
-'''
+
 #将数据分为输入数据和输出结果
 array = data.values
 X = array[:, 8:]
 Y = array[:, 6]
-
 
 #K折交叉验证分离
 num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#平均绝对误差
+#线性回归算法
 model = LinearRegression()
+
+#平均绝对误差
 scoring1 = 'neg_mean_absolute_error'
 result = cross_val_score(model, X, Y, cv = kfold, scoring = scoring1)
 print('MAE: %.3f (%.3f)' % (result.mean(), result.std()))
