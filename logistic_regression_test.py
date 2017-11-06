@@ -28,9 +28,9 @@ print('算法评估结果: %.3f%% (%.3f%%)' % (result.mean() * 100, result.std()
 #对数损失函数(logloss)
 scoring1 = 'neg_log_loss'
 result = cross_val_score(model, X, Y, cv = kfold, scoring = scoring1)
-print('Logloss %.3f (%.4f)' % (result.mean(), result.std()))
+print('Logloss %.3f (%.3f)' % (result.mean(), result.std()))
 
 #AUC
-scoring2 = 'roc_acu'
+scoring2 = 'roc_auc'
 result = cross_val_score(model, X, Y, cv = kfold, scoring = scoring2)
-print('AUC %.3f (%.4f)' % (result.mean(), result.std()))
+print('AUC %.3f (%.3f)' % (result.mean(), result.std()))
