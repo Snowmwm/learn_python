@@ -40,6 +40,4 @@ for n in range(16):
         
     #模糊：
     image = image.filter(ImageFilter.BLUR)
-
-
     image.save('code%d.jpg' % n, 'jpeg')
