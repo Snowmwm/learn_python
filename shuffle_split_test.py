@@ -21,7 +21,9 @@ test_size = 0.33
 seed = 7
 kfold = ShuffleSplit(n_splits = n_splits, test_size = test_size, random_state = seed)
 
-#分类正确率
+#逻辑回归
 model = LogisticRegression()
+
+#分类正确率
 result = cross_val_score(model, X, Y, cv = kfold)
 print('算法评估结果: %.3f%% (%.3f%%)' % (result.mean() * 100, result.std() * 100))
