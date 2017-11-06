@@ -20,8 +20,10 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#分类正确率
+#逻辑回归
 model = LogisticRegression()
+
+#分类正确率
 result = cross_val_score(model, X, Y, cv = kfold)
 print('算法评估结果: %.3f%% (%.3f%%)' % (result.mean() * 100, result.std() * 100))
 
