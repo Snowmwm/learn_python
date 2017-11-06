@@ -18,7 +18,9 @@ Y = array[:, 8]
 #留一交叉验证分离
 loocv = LeaveOneOut()
 
-#分类正确率
+#逻辑回归
 model = LogisticRegression()
+
+#分类正确率
 result = cross_val_score(model, X, Y, cv = loocv)
 print('算法评估结果: %.3f%% (%.3f%%)' % (result.mean() * 100, result.std() * 100))
