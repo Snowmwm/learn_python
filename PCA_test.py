@@ -18,5 +18,6 @@ Y = array[:, 8]
 #特征选择
 pca = PCA(n_components = 3)
 fit = pca.fit(X)
+
 print('解释方差: %s' % fit.explained_variance_ratio_)
 print(fit.components_)
