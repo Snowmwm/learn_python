@@ -19,7 +19,7 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#岭（脊）回归算法
+#套索回归算法
 model = Lasso()
 scoring = 'neg_mean_squared_error'
 result = cross_val_score(model, X, Y, cv = kfold, scoring = scoring)
