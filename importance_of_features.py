@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#装袋决策树算法
+#特征重要性
 
 from pandas import read_csv
 from sklearn.ensemble import ExtraTreesClassifier
