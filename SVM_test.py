@@ -19,7 +19,7 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#支持向量机
+#支持向量机分类
 model = SVC()
 result = cross_val_score(model, X, Y, cv = kfold)
 print(result.mean())
