@@ -19,7 +19,7 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#KNN回归
+#支持向量机回归
 model = SVR()
 scoring = 'neg_mean_squared_error'
 result = cross_val_score(model, X, Y, cv = kfold, scoring = scoring)
