@@ -19,7 +19,7 @@ num_folds = 10
 seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 
-#分类与回归树
+#分类与回归树（分类）
 model = DecisionTreeClassifier()
 result = cross_val_score(model, X, Y, cv = kfold)
 print(result.mean())
