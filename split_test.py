@@ -22,8 +22,10 @@ test_size = 0.33
 seed = 4
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = test_size, random_state = seed)
 
-#分类正确率
+#逻辑回归
 model = LogisticRegression()
+
+#分类正确率
 model.fit(X_train, Y_train)
 result = model.score(X_test, Y_test)
 print('算法评估结果: %.3f%%' % (result * 100))
