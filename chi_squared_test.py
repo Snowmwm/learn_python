@@ -21,5 +21,6 @@ test = SelectKBest(score_func = chi2, k = 4)
 fit = test.fit(X, Y)
 set_printoptions(precision = 3)
 print(fit.scores_)
+
 features = fit.transform(X)
 print(features)
