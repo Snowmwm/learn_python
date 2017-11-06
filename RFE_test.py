@@ -20,9 +20,12 @@ Y = array[:, 8]
 model = LogisticRegression()
 rfe = RFE(model, 3)
 fit = rfe.fit(X, Y)
+
 print('特征个数:')
 print(fit.n_features_)
+
 print('被选定的特征:')
 print(fit.support_)
+
 print('特征排名:')
 print(fit.ranking_)
