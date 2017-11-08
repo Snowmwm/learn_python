@@ -24,7 +24,7 @@ data = read_csv(filename, names = names)
 # a) 描述性统计
 print('数据维度:')
 print('行:%s, 列:%s' % data.shape)
-print('\n数据维度:')
+print('\n查看数据前十行:')
 print(data.head(10))
 print('\n统计性描述:')
 set_option('precision',2)
