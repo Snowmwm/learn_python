@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Python机器学习项目模版
-
 # 1. 准备
 # a) 导入类库
 import numpy as np
