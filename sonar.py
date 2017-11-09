@@ -74,7 +74,7 @@ seed = 7
 kfold = KFold(n_splits = num_folds, random_state = seed)
 scoring = 'accuracy'
 
-#箱线图
+#画图准备
 fig = plt.figure()
 fig.suptitle('Algorithm Comparison')
 ax = fig.add_subplot(111)
