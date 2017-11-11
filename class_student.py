@@ -3,6 +3,8 @@
 
 #创建类
 class Student(object):
+    '''存储学生的信息。并根据分数评出等级'''
+
     def __init__(self, name, score, sex): #通过“__init__”方法绑定属性
         #把存储在形参中的值传给私有变量
         self.__name = name
@@ -38,7 +40,6 @@ class Student(object):
         else:
             return'C'
             
-
 #创建子类            
 class Boy(Student):
     def __init__(self, name, score, sex='M'):
@@ -47,22 +48,3 @@ class Boy(Student):
 class Girl(Student):
     def __init__(self, name, score, sex='F'):
         super().__init__(name, score, sex)
-
-#创建实例
-bart = Student('Bart Simpson', 59, 'M')
-lisa = Student('Lisa Simpson', 87, 'F')
-ana = Girl('Ana Conda', 100)
-
-#调用实例方法
-bart.get_sex()
-bart.print_score()
-print(bart.get_grade(90,60))
-bart.set_score(92)
-bart.print_score()
-print(bart.get_grade(90,60))
-lisa.print_score()
-print(lisa.get_grade(90,60))
-ana.get_sex()
-ana.print_score()
-print(ana.get_grade(90,60))
-
