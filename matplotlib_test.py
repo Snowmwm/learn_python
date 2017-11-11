@@ -9,16 +9,16 @@ from pandas.plotting import scatter_matrix
 from random_walk import RandomWalk
 
 #折线图
-'''
 myarray_x = [1, 2, 3]
 myarray_y = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]]) #定义绘图的数据
 plt.plot(myarray_x, myarray_y, linewidth = 5) #初始化绘图
+plt.fill_between(myarray_x, myarray_y[:, 1], myarray_y[:, 2], facecolor='blue', alpha=0.2) #给图标区域上色
 #添加标题，并给坐标轴加上标签
 plt.title('Test', fontsize = 32)
 plt.xlabel('x axis', fontsize = 16)
 plt.ylabel('y axis', fontsize = 16)
 plt.show() #打开matplotlib查看器，并显示绘制的图形
-'''
+
 
 #散点图
 '''
@@ -33,6 +33,7 @@ plt.savefig('matplotlib_test.png', bbox_inches='tight')
 '''
 
 #创建一个RandomWalk实例，并将其包含的点都绘制出来
+'''
 rw = RandomWalk(50000)
 rw.fill_walk()
 plt.figure(figsize=(12,8))
@@ -46,7 +47,7 @@ plt.scatter(rw.x_values[-1], rw.y_values[-1], c='red', edgecolor='none', s=40)
 plt.axes().get_xaxis().set_visible(False)
 plt.axes().get_yaxis().set_visible(False)
 plt.show()
-
+'''
 
 #导入CSV数据
 '''
