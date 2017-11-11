@@ -2,6 +2,7 @@
 *.jpg
 *.csv
 *.txt
+*.svg
 
 __pycache__/
 templates/
