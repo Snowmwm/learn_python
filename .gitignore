@@ -3,6 +3,7 @@
 *.csv
 *.txt
 *.svg
+*.json
 
 __pycache__/
 templates/
