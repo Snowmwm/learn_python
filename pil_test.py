@@ -3,12 +3,16 @@
 
 from PIL import Image,ImageFont,ImageDraw
 import os
+import numpy as np
 
+import imtools as it
+
+#制作微信+1头像
+'''
 ImageFile = 'test.png'
-SaveFile = 'profile_picture.png'
+SaveFile = 'test1.png'
 
 def AddNumToImg(Imagefile,SaveFile):
-    '''制作微信+1头像'''
     # 打开Imagefile，将其模式转换为RGBA
     with Image.open(Imagefile).convert('RGBA') as im:
         # 创建一个新图片，大小和模式直接使用Imagefile的
@@ -28,4 +32,34 @@ def AddNumToImg(Imagefile,SaveFile):
         # 展示保存后的图片
         out.show()
         
-AddNumToImg(ImageFile,SaveFile)
+#AddNumToImg(ImageFile,SaveFile)
+'''
+
+#利用数组操作图像
+'''
+im1 = np.array(Image.open(ImageFile).convert('L'))
+im2 = 255-im1 #对图像进行反相处理
+im3 = (100.0/255) * im1 + 100 #将图像像素值变换到100——200区间
+im4 = 255.0 * (im1 / 255.0)**2 #对图像像素值求平方后得到的图像(使暗的更暗)
+im5, cdf = it.histeq(im) #直方图均衡化
+im6 = it.compute_average(it.get_imlist('C:\\PTW'))#图像平均
+
+out1 = Image.fromarray(np.uint8(im1))
+out2 = Image.fromarray(np.uint8(im2))
+out3 = Image.fromarray(np.uint8(im3))
+out4 = Image.fromarray(np.uint8(im4))
+out5 = Image.fromarray(np.uint8(im5))
+out6 = Image.fromarray(np.uint8(im6))
+out1.save('test1.jpg')
+out2.save('test2.jpg')
+out3.save('test3.jpg')
+out4.save('test4.jpg')
+out5.save('test5.jpg')
+out6.save('test6.jpg')
+'''
+
+
+
+
+
+
