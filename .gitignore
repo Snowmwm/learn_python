@@ -4,6 +4,7 @@
 *.txt
 *.svg
 *.json
+*.ttf
 
 __pycache__/
 templates/
