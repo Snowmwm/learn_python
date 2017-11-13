@@ -5,11 +5,15 @@ from PIL import Image
 import os
 
 def get_imlist(path):
-    return [os.path.join(path, f) for f in os.listdir(path) if f.endswith('.jpg') or f.endswith('.png')]
+    '''返回目录中所有JPG图像的文件名列表'''
+    return [os.path.join(path, f) for f in os.listdir(path) \
+    if f.endswith('.jpg')] #or f.endswith('.png')
 
+#格式转换
+'''
 filelist = get_imlist('C:\\PTW\\learn_python')
 print(filelist)
-    
+
 for infile in filelist:
     outfile = os.path.splitext(infile)[0] + '.png'
     if infile != outfile:
@@ -17,3 +21,4 @@ for infile in filelist:
             Image.open(infile).save(outfile)
         except IOError:
             print('cannot convert', infile)
+'''
