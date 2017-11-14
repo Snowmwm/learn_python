@@ -5,6 +5,7 @@
 *.svg
 *.json
 *.ttf
+*.pkl
 
 __pycache__/
 templates/
