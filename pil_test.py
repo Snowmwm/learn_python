@@ -5,15 +5,15 @@ from PIL import Image,ImageFont,ImageDraw
 from scipy.ndimage import filters
 import os
 import numpy as np
+from numpy import random
 import matplotlib.pyplot as plt
 import pickle
+from scipy.misc import imsave
 
 import imtools as it
-import pca
 
 ImageFile = 'test.png'
 SaveFile = 'test1.png'
-
 #制作微信+1头像
 '''
 
@@ -143,6 +143,32 @@ outy.save('test_y.jpg')
 outg.save('test_g.jpg')
 '''
 
+#ROF去噪
+'''
+# 使用噪声创建合成图像
+im = np.zeros((500,500))
+im[100:400,100:400] = 128
+im[200:300,200:300] = 255
+im = im + 30*random.standard_normal((500,500))
+U,T = it.denoise(im,im)
+G = filters.gaussian_filter(im,10)
 
+# 保存生成结果
+imsave('synth_im.jpg',im)
+imsave('synth_T.jpg',T)
+imsave('synth_rof.jpg',U)
+imsave('synth_gaussian.jpg',G)
+#\\\\\\\\\\\\\\\\\\\\\\\\
 
+#给图片去噪
+im = np.array(Image.open('jzg.jpg').convert('L'))
+im = im + 20*random.standard_normal((241,241))
+U,T = it.denoise(im,im)
+G = filters.gaussian_filter(im,2)
 
+# 保存生成结果
+imsave('synth_im.jpg',im)
+imsave('synth_T.jpg',T)
+imsave('synth_rof.jpg',U)
+imsave('synth_gaussian.jpg',G)
+'''
