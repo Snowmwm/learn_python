@@ -12,6 +12,8 @@ from scipy.misc import imsave
 
 import imtools as it
 
+
+
 ImageFile = 'test.png'
 SaveFile = 'test1.png'
 #制作微信+1头像
@@ -65,6 +67,8 @@ out6.save('test6.jpg')
 
 #计算图像主成份
 '''
+import PCA
+
 imlist = it.get_imlist('C:\\PTW\\learn_python')
 im = np.array(Image.open(imlist[0]))
 m, n = im.shape[0:2] #获取图像大小
@@ -99,15 +103,21 @@ V = f.load(f)
 '''
 
 #图像高斯模糊
-'''
-im1 = np.array(Image.open(ImageFile))
+
+im1 = np.array(Image.open('jzg.jpg'))
 im2 = np.zeros(im1.shape)
 for i in range(3):
-    im2[:,:,i] = filters.gaussian_filter(im1[:,:,i], 4*i+2)
-im2[:,:,3] = im1[:,:,3]
+    im2[:,:,i] = filters.gaussian_filter(im1[:,:,i], 2)
+    
+im3 = im1 - im2
+#im2[:,:,3] = im1[:,:,3]
+im4 = 2*im1 - im2
+
 out2 = Image.fromarray(np.uint8(im2))
-out2.save('gaussian_filter.png')
-''' 
+out2.save('gaussian_filter.jpg')
+out3 = Image.fromarray(np.uint8(im4))
+out3.save('unsharp_masking.jpg')
+
 
 #图像导数
 '''
@@ -145,12 +155,14 @@ outg.save('test_g.jpg')
 
 #ROF去噪
 '''
+import ROF
+
 # 使用噪声创建合成图像
 im = np.zeros((500,500))
 im[100:400,100:400] = 128
 im[200:300,200:300] = 255
 im = im + 30*random.standard_normal((500,500))
-U,T = it.denoise(im,im)
+U,T = ROF.denoise(im,im)
 G = filters.gaussian_filter(im,10)
 
 # 保存生成结果
@@ -163,7 +175,7 @@ imsave('synth_gaussian.jpg',G)
 #给图片去噪
 im = np.array(Image.open('jzg.jpg').convert('L'))
 im = im + 20*random.standard_normal((241,241))
-U,T = it.denoise(im,im)
+U,T = ROF.denoise(im,im)
 G = filters.gaussian_filter(im,2)
 
 # 保存生成结果
