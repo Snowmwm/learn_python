@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PIL import Image,ImageFont,ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from scipy.ndimage import filters
 import os
 import numpy as np
@@ -12,35 +12,8 @@ from scipy.misc import imsave
 
 import imtools as it
 
-
-
 ImageFile = 'test.png'
 SaveFile = 'test1.png'
-#制作微信+1头像
-'''
-
-def AddNumToImg(Imagefile,SaveFile):
-    # 打开Imagefile，将其模式转换为RGBA
-    with Image.open(Imagefile).convert('RGBA') as im:
-        # 创建一个新图片，大小和模式直接使用Imagefile的
-        txt = Image.new(im.mode,im.size)
-        # 设置字体和字号
-        font = ImageFont.truetype('msyh.ttf', 66)
-        # 编辑txt新图片
-        d = ImageDraw.Draw(txt)
-        # 画一个圆，并且设置为红色
-        d.ellipse((490,50,590,150), ('red'))
-        # 增加一个数字，位置要处于上面的圆的中间，内容为1，字体为微软雅黑，填充颜色为白色，最后的fill里面的值可以为色值和颜色名称
-        d.text((520, 55), '1', font=font, fill=(255, 255, 255))
-        # 合并图片
-        out = Image.alpha_composite(im,txt)
-        # 保存图片
-        out.save(SaveFile)
-        # 展示保存后的图片
-        out.show()
-        
-#AddNumToImg(ImageFile,SaveFile)
-'''
 
 #利用数组操作图像
 '''
@@ -103,21 +76,20 @@ V = f.load(f)
 '''
 
 #图像高斯模糊
-
-im1 = np.array(Image.open('jzg.jpg'))
+'''
+im1 = np.array(Image.open(ImageFile))
 im2 = np.zeros(im1.shape)
 for i in range(3):
-    im2[:,:,i] = filters.gaussian_filter(im1[:,:,i], 2)
+    im2[:,:,i] = filters.gaussian_filter(im1[:,:,i], 4*i+2)
     
 im3 = im1 - im2
-#im2[:,:,3] = im1[:,:,3]
-im4 = 2*im1 - im2
+im2[:,:,3] = im1[:,:,3]
 
 out2 = Image.fromarray(np.uint8(im2))
-out2.save('gaussian_filter.jpg')
-out3 = Image.fromarray(np.uint8(im4))
-out3.save('unsharp_masking.jpg')
-
+out2.save('gaussian_filter.png')
+out3 = Image.fromarray(np.uint8(im3))
+out3.save('unsharp_masking.png')
+'''
 
 #图像导数
 '''
