@@ -9,6 +9,7 @@
 
 __pycache__/
 templates/
+mnist/
 
 test.db
 sina.html
