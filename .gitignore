@@ -10,6 +10,7 @@
 __pycache__/
 templates/
 mnist/
+cifar10/
 
 test.db
 sina.html
