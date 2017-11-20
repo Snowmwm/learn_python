@@ -65,15 +65,29 @@ for i in range(imnbr):
 plt.show()
 
 # 保存均值和主成分数据
-with open('pca_modes.pkl', 'wb') as f:
-pickle.dump(im_mean, f)
-pickle.dump(V, f)
+with open('pca_models.pkl', 'wb') as f:
+    pickle.dump(im_mean, f)
+    pickle.dump(V, f)
     
-# 载入均值和主成分数据
-with open('pca_modes.pkl', 'rb') as f:
-im_mean = f.load(f) # 载入对象顺序必须和保存顺序一样
-V = f.load(f)
+
 '''
+'''
+# 载入均值和主成分数据
+with open('pca_models.pkl', 'rb') as f:
+    im_mean = pickle.load(f) # 载入对象顺序必须和保存顺序一样
+    V = pickle.load(f)
+#显示均值图像和前6个模式
+fig = plt.figure()
+plt.gray()
+plt.subplot(2, 4, 1)
+plt.imshow(im_mean.reshape(640, 640))
+for i in range(6):
+    plt.subplot(2, 4, 2+i)
+    plt.imshow(V[i].reshape(640,640))
+    
+plt.show()
+'''
+
 
 #图像高斯模糊
 '''
