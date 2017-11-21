@@ -9,10 +9,11 @@ from torch.autograd import Variable
 import torchvision
 import torchvision.transforms as transforms
 import math 
+from PIL import Image
 
 #超参数设置
-EPOCH = 30
-BATCH_SIZE = 16
+EPOCH = 100
+BATCH_SIZE = 32
 LR = 0.001
 MOMENTUM = 0.9
 SEED = 666
@@ -40,6 +41,8 @@ testset = torchvision.datasets.CIFAR10(root='./cifar10', train=False, download=F
 train_loader = Data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True)
 test_loader = Data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=True)
 
+#每一epoch中的mini-batch数
+batch_num = math.floor(len(trainset) / BATCH_SIZE)  
 
 #W初始化
 def weight_init(m):
@@ -52,7 +55,7 @@ def weight_init(m):
         m.weight.data.fill_(1)
         m.bias.data.zero_()
 
-
+   
 #建立卷积神经网络
 
 class CNN(nn.Module):
@@ -60,29 +63,29 @@ class CNN(nn.Module):
         super(CNN, self).__init__()
         # input shape (3, 32, 32)
         self.pre_layers = nn.Sequential(
-            nn.Conv2d(3, 16, 3, 1, 1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-        )
-        # output shape (16, 32, 32)
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(16, 32, 5, 1, 2),
+            nn.Conv2d(3, 32, 3, 1, 1),
             nn.BatchNorm2d(32),
             nn.ReLU(),
         )
         # output shape (32, 32, 32)
-        self.maxpool = nn.MaxPool2d(3, 2)
-        # output shape (32, 15, 15)
-        self.conv2 = nn.Sequential(
+        self.conv1 = nn.Sequential(
             nn.Conv2d(32, 64, 5, 1, 2),
             nn.BatchNorm2d(64),
             nn.ReLU(),
         )
+        # output shape (64, 32, 32)
+        self.maxpool = nn.MaxPool2d(3, 2)
         # output shape (64, 15, 15)
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(64, 96, 5, 1, 2),
+            nn.BatchNorm2d(96),
+            nn.ReLU(),
+        )
+        # output shape (96, 15, 15)
         self.avgpool = nn.AvgPool2d(3, 2)
-        # output shape (64, 7, 7)
+        # output shape (96, 7, 7)
         self.conv3 = nn.Sequential(
-            nn.Conv2d(64, 128, 5, 1, 2),
+            nn.Conv2d(96, 128, 5, 1, 2),
             nn.BatchNorm2d(128),
             nn.ReLU(),
         )
@@ -112,7 +115,6 @@ class CNN(nn.Module):
         output = self.out(x)
         return output      
 
-
 def train(epoch):
     cnn.train()#把module设成training模式，对Dropout和BatchNorm有影响
     running_loss = 0.0
@@ -133,9 +135,9 @@ def train(epoch):
         #参数更新
         optimizer.step()
         running_loss += loss.data[0]
-        if i % 3125 == 3124:    
+        if i % batch_num == (batch_num - 1):    
             print('epoch: %d, batch: %5d, loss: %.3f' %
-                  (epoch+1, i+1, running_loss / 3125))
+                  (epoch+1, i+1, running_loss / batch_num))
             running_loss = 0.0        
         
 def test(epoch):
