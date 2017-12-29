@@ -9,6 +9,7 @@ from pandas.plotting import scatter_matrix
 from random_walk import RandomWalk
 
 #折线图
+'''
 myarray_x = [1, 2, 3]
 myarray_y = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]]) #定义绘图的数据
 plt.plot(myarray_x, myarray_y, linewidth = 5) #初始化绘图
@@ -18,7 +19,7 @@ plt.title('Test', fontsize = 32)
 plt.xlabel('x axis', fontsize = 16)
 plt.ylabel('y axis', fontsize = 16)
 plt.show() #打开matplotlib查看器，并显示绘制的图形
-
+'''
 
 #散点图
 '''
@@ -30,11 +31,12 @@ plt.ylabel('y axis')
 plt.axis([0, 1100, 0, 1100000]) #设置每个坐标的取值范围
 #plt.tick_params(axis = 'both', which = 'major', labelsize = 14) #设置刻度标记大小
 plt.savefig('matplotlib_test.png', bbox_inches='tight')
+plt.show()
 '''
 
 #创建一个RandomWalk实例，并将其包含的点都绘制出来
 '''
-rw = RandomWalk(50000)
+rw = RandomWalk(5000)
 rw.fill_walk()
 plt.figure(figsize=(12,8))
 point_numbers = list(range(rw.num_points))
@@ -50,7 +52,7 @@ plt.show()
 '''
 
 #导入CSV数据
-'''
+
 filename = 'pima-indians-diabetes.data.csv'
 names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
 data = read_csv(filename, names=names)
@@ -85,4 +87,3 @@ plt.show()
 #散点矩阵图：
 scatter_matrix(data)
 plt.show()
-'''
