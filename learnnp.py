@@ -16,14 +16,16 @@ print(f)
 '''
 
 #array属性
-'''
+
 array = np.array([[1,2,3],
                 [2,3,4]])
 print(array)
 print('number of dim:', array.ndim)
 print('shape:', array.shape)
 print('size:', array.size)
-'''
+
+a = np.array([0,1,2,3])
+print(a[:1])
 
 #numpy基础运算
 '''
@@ -135,6 +137,7 @@ print(a,b,c,d)
 '''
 
 #numpy加速
+'''
 #能用view尽量不用copy，能用ravel尽量不用flatten
 a_view1 = a[1:2, 3:6]    # 切片 slice
 a_view2 = a[:100]        # 同上
@@ -184,3 +187,4 @@ a = np.add(a, 1)  # 0.032738
 #前两个运算会copy
 a += 1                 # 0.011219
 np.add(a, 1, out=a)    # 0.008843
+'''
