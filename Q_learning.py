@@ -9,11 +9,11 @@ np.random.seed(2)
 
 N_STATES = 10
 ACTIONS = ['left', 'right'] #available
-EPSILON = 0.9 #greedy police
+EPSILON = 0.9 #选择最优动作的概率
 ALPHA = 0.1 #learning rate
 LAMBDA = 0.9 #discont factor
 MAX_EPISODES = 12
-FRESH_TIME = 0.1
+FRESH_TIME = 0.02
 
 def build_q_table(n_states, actions):
     table = pd.DataFrame(
@@ -25,7 +25,8 @@ def build_q_table(n_states, actions):
     
 def choose_action(state, q_table):
     #如何选择一个动作
-    state_actions = q_table.iloc[state, :]
+    state_actions = q_table.iloc[state, :] 
+    #将当前state的各动作Q值复制到state_actions
     if (np.random.uniform() > EPSILON) or (state_actions.all() == 0):
         action_name = np.random.choice(ACTIONS)
     else:
@@ -40,7 +41,7 @@ def get_env_feedback(S, A):
     """
     if A =='right':
         if S == N_STATES - 2: #因为是从S=0开始的
-            S_ = 'terminal'
+            S_ = 'terminal' #到达终点
             R = 1
         else:
             S_ = S + 1
@@ -57,6 +58,7 @@ def update_env(S, episode, step_counter):
     #建立环境
     env_list = ['-']*(N_STATES-1) + ['T']
     if S == 'terminal':
+        #到达终点后停顿2秒，输出当前回合数及移动步数
         interaction = 'Episode %s: total_steps = %s' % (episode+1, step_counter)
         print('\r{}'.format(interaction), end='')
         time.sleep(2)
@@ -73,27 +75,32 @@ def rl():
     for episode in range(MAX_EPISODES):
         step_counter = 0
         S = 0
+        update_env(S, episode, step_counter) #建立新环境
+        
         is_terminated = False
-        update_env(S, episode, step_counter)
         while not is_terminated:
         
-            A = choose_action(S, q_table)
-            S_, R = get_env_feedback(S, A)
-            q_predict = q_table.ix[S, A]
-            #Q估计 = Q(s2)
+            A = choose_action(S, q_table) #根据state和Q表选择动作
+            S_, R = get_env_feedback(S, A) #获得环境对动作的反馈
+            
+            q_predict = q_table.ix[S, A] #从Q表中获得Q估计值
+            
             if S_ != 'terminal':
                 q_target = R + LAMBDA * q_table.iloc[S_, :].max()
                 #Q现实 = R + γ*max(Q(s',a1), Q(s',a2),……)
+                #即当前动作从环境实际获得的回报 + (衰减γ x 预测的下回合回报)
             else:
                 q_target = R
                 is_terminated = True
                 
-            q_table.ix[S, A] += ALPHA *(q_target - q_predict)
-            #新NN = 老NN + α(Q现实 - Q估计)
-            S = S_
+            q_table.ix[S, A] += ALPHA *(q_target - q_predict) #q_table更新
+            #新q值 = 老q值 + α(Q现实 - Q估计)
             
-            update_env(S, episode, step_counter+1)
+            S = S_ #移动到下一个state
+            
             step_counter += 1
+            update_env(S, episode, step_counter) #更新环境
+            
     return q_table
     
 if __name__ == "__main__":
