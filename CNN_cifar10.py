@@ -9,22 +9,21 @@ from torch.autograd import Variable
 import torchvision
 import torchvision.transforms as transforms
 import math 
-from PIL import Image
 
 #超参数设置
-EPOCH = 100
+EPOCH = 30
 BATCH_SIZE = 32
 LR = 0.001
-MOMENTUM = 0.9
-SEED = 666
 DECAY = 0.04
+SEED = 666
 
 #随机种子设置
 use_gpu = torch.cuda.is_available()
 torch.manual_seed(SEED)
 if use_gpu:
     torch.cuda.manual_seed(SEED)
-
+    #torch.cuda.manual_seed_all(SEED)
+    
 #用torchvision读取数据    
 #数据预处理
 transform=transforms.Compose([transforms.ToTensor(),
@@ -92,13 +91,13 @@ class CNN(nn.Module):
         # output shape (128, 7, 7)
         # avgpool
         # output shape (128, 3, 3)
-        self.fc = nn.Linear(128*3*3, 128)
-        nn.init.normal(self.fc.weight, mean=0, std=0.003)
+        self.fc = nn.Linear(128*3*3, 10)
+        nn.init.normal(self.fc.weight, mean=0, std=0.0125)
         
-        self.bn = nn.BatchNorm2d(128)
+        #self.bn = nn.BatchNorm2d(128)
         
-        self.out = nn.Linear(128, 10)
-        nn.init.normal(self.out.weight, mean=0, std=0.025)
+        #self.out = nn.Linear(128, 10)
+        #nn.init.normal(self.out.weight, mean=0, std=0.025)
     
     def forward(self, x):
         x = self.pre_layers(x)
@@ -109,14 +108,14 @@ class CNN(nn.Module):
         x = self.conv3(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1) #展平
-        x = self.fc(x)
-        x = F.relu(self.bn(x))
+        output = self.fc(x)
+        #x = F.relu(self.bn(x))
         #x = F.dropout(x, training=self.training) #随机将输入张量中的部分元素置0
-        output = self.out(x)
+        #output = self.out(x)
         return output      
 
 def train(epoch):
-    cnn.train()#把module设成training模式，对Dropout和BatchNorm有影响
+    cnn.train()#把module设成训练模式,只对Dropout和BN有影响
     running_loss = 0.0
     for i, data in enumerate(train_loader, 0):
         #获取输入和标签
@@ -136,12 +135,12 @@ def train(epoch):
         optimizer.step()
         running_loss += loss.data[0]
         if i % batch_num == (batch_num - 1):    
-            print('epoch: %d, batch: %5d, loss: %.3f' %
-                  (epoch+1, i+1, running_loss / batch_num))
+            print('epoch: %d, loss: %.3f' %
+                  (epoch+1, running_loss / batch_num))
             running_loss = 0.0        
         
 def test(epoch):
-    cnn.eval()#把module设置为评估模式，只对Dropout和BatchNorm模块有影响
+    cnn.eval()#把module设置为评估模式
     correct = 0
     total = 0
     for data in test_loader:
