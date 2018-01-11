@@ -38,7 +38,7 @@ print(df.sort_values(by='c'))  #对c列的值排序
 
 
 #pandas选择数据
-
+'''
 dates = pd.date_range('20170101', periods=6)
 df = pd.DataFrame(np.arange(24).reshape((6,4)),index=dates,
                     columns=['A','B','C','D'])  
@@ -55,7 +55,7 @@ print(df.iloc[[1,3,5],1:3])#根据位置(iloc)选择
 print(df.ix[:3,['A','D']])#混合(ix)选择
 
 print(df[df.A>8])#条件判断选择
-
+'''
 
 #pandas设置值
 '''
