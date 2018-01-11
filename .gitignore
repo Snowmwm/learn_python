@@ -12,6 +12,7 @@ templates/
 mnist/
 cifar10/
 other/
+sklearn/
 
 test.db
 sina.html
