@@ -9,6 +9,7 @@ from maze_env import Maze
 EPSILON = 0.9 #选择最优动作的概率
 ALPHA = 0.01 #learning rate
 GAMMA = 0.9 #discont factor
+LAMBDA = 0.9
 
 
 class RL(object):
@@ -64,10 +65,10 @@ class QLearningTable:
             #Q现实 = R + γ*max(Q(s_,a1), Q(s_,a2),……)
         else:
             q_target = r
-        self.q_table.ix[s, a] += self.lr * (q_target - q_predict) #q_table更新
         #新q值 = 老q值 + α(Q现实 - Q估计)
+        self.q_table.ix[s, a] += self.lr * (q_target - q_predict) #q_table更新
+
         
-    
 class SarsaTable(RL):
     def __init__(self, actions, learning_rate=ALPHA,
                 reward_decay=GAMMA, e_greedy=EPSILON):
@@ -83,5 +84,50 @@ class SarsaTable(RL):
         else:
             q_target = r 
         self.q_table.ix[s, a] += self.lr * (q_target - q_predict)     
-    
-    
+
+        
+class SarsaLambdaTable(RL):
+    def __init__(self, actions, learning_rate=ALPHA, reward_decay=GAMMA, e_greedy=EPSILON, trace_decay=LAMBDA):
+        super(SarsaLambdaTable, self).__init__(actions, learning_rate, reward_decay, e_greedy) #继承属性
+
+        # 向后观测, eligibility trace.
+        self.lambda_ = trace_decay
+        self.eligibility_trace = self.q_table.copy()
+
+    def check_state_exist(self, state):
+        if state not in self.q_table.index:
+            # append new state to q table
+            to_be_append = pd.Series(
+                    [0] * len(self.actions),
+                    index=self.q_table.columns,
+                    name=state,
+                )
+            self.q_table = self.q_table.append(to_be_append)
+
+            # also update eligibility trace
+            self.eligibility_trace = self.eligibility_trace.append(to_be_append)
+
+    def learn(self, s, a, r, s_, a_):
+        self.check_state_exist(s_)
+        
+        q_predict = self.q_table.ix[s, a]
+        if s_ != 'terminal':
+            q_target = r + self.gamma * self.q_table.ix[s_, a_]
+        else:
+            q_target = r
+        error = q_target - q_predict
+
+        # increase trace amount for visited state-action pair
+
+        # Method 1:
+        # self.eligibility_trace.ix[s, a] += 1
+
+        # Method 2:
+        self.eligibility_trace.ix[s, :] *= 0
+        self.eligibility_trace.ix[s, a] = 1
+
+        # Q update
+        self.q_table += self.lr * error * self.eligibility_trace
+
+        # decay eligibility trace after update
+        self.eligibility_trace *= self.gamma*self.lambda_    
