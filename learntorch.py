@@ -6,11 +6,14 @@ import torch.nn as nn
 import torch.nn.functional as F #激励函数都在这里
 import torch.utils.data as Data
 import matplotlib.pyplot as plt
-import numpy as np
 from torch.autograd import Variable
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 
 #GPU加速测试
-'''
+
 #cuda test
 y = torch.Tensor([1,0])
 yy = y.cuda()
@@ -19,7 +22,7 @@ print(yy)
 #cudnn test
 from torch.backends import cudnn
 print(cudnn.is_acceptable(yy))
-'''
+
 
 #数据转换
 '''
@@ -45,7 +48,8 @@ print(np.dot(np_data,np_data))
 '''
 #将tensor放入Variable
 #其中requires_grad代表是否参与误差反向传播, 要不要计算梯度
-tensor = torch.FloatTensor(2,2)
+#tensor = torch.FloatTensor(2,2)
+tensor = torch.Tensor([3,4])
 variable = Variable(tensor, requires_grad=True)
 print(variable)
 
@@ -53,7 +57,7 @@ print(variable.data) #获取tensor形式数据
 print(variable.data.numpy()) #获取numpy形式数据
 
 #计算梯度
-v_out = torch.mean(variable**2)
+v_out = torch.mean(2*variable**2)
 v_out.backward()  #模拟v_out的误差反向传播
 print(variable.grad)  #显示Variable的梯度输出结果
 '''
@@ -72,6 +76,17 @@ y_tanh = F.tanh(x).data.numpy()
 y_softplus = F.softplus(x).data.numpy() #f(x)=ln(1+ex)
 #y_softmax = F.softmax(x)  
 #softmax比较特殊,不能直接显示, 不过他是关于概率的, 用于分类
+
+plt.figure()
+plt.subplot(221)
+plt.plot(x_np,y_relu)
+plt.subplot(222)
+plt.plot(x_np,y_sigmoid)
+plt.subplot(223)
+plt.plot(x_np,y_tanh)
+plt.subplot(224)
+plt.plot(x_np,y_softplus)
+plt.show()
 '''
 
 #回归问题
@@ -82,7 +97,7 @@ x = torch.unsqueeze(torch.linspace(-1, 1, 100), dim=1)
 y = x.pow(2) + 0.2*torch.rand(x.size())                 
 # noisy y data (tensor), shape=(100, 1)
 
-x, y = torch.autograd.Variable(x), Variable(y) #将tensor放入Variable
+x, y = Variable(x), Variable(y) #将tensor放入Variable
 
 #建立神经网络
 class Net(nn.Module):  # 继承 torch 的 Module
@@ -110,6 +125,7 @@ optimizer = torch.optim.SGD(net.parameters(), lr=0.5)
 #定义损失函数
 loss_func = nn.MSELoss() # 预测值和真实值的误差计算公式 (均方差)
 
+plt.ion()
 #开始训练
 for t in range(100):
     prediction = net(x)     # 喂给 net 训练数据 x, 输出预测值
@@ -117,6 +133,14 @@ for t in range(100):
     optimizer.zero_grad()   # 清空上一步的残余更新参数值
     loss.backward()         # 误差反向传播, 计算参数更新值
     optimizer.step()        # 将参数更新值施加到 net 的 parameters 上
+
+    if t%5 == 4:
+        plt.cla()
+        plt.scatter(x.data.numpy(),y.data.numpy())
+        plt.plot(x.data.numpy(),prediction.data.numpy(),'r-',lw=5)
+        plt.text(0.5, 0, 'Loss=%.4f' % loss.data[0], fontdict={'size': 20, 'color':  'red'})
+        plt.pause(0.1)
+        plt.show()
 '''
 
 #分类问题
@@ -143,7 +167,7 @@ class Net(nn.Module):
     def __init__(self, n_feature, n_hidden, n_output):
         super(Net, self).__init__() 
         self.hidden = nn.Linear(n_feature, n_hidden) 
-        self.predict = nn.Linear(n_hidden, n_output)
+        self.out = nn.Linear(n_hidden, n_output)
 
     def forward(self,x):
         x = F.relu(self.hidden(x))   
@@ -171,6 +195,7 @@ for t in range(100):
 #预测
 #过了一道softmax激励函数后的最大概率才是预测值
 prediction = torch.max(F.softmax(out), 1)[1]
+print(prediction)
 '''
 
 #快速搭建神经网络
