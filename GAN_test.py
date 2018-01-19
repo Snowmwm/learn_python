@@ -63,11 +63,14 @@ for step in range(10000):
     G_ideas = Variable(torch.randn(BATCH_SIZE, N_IDEAS))
     G_paintings = G(G_ideas)  #生成数据
     
-    prob_artist0 = D(artist_paintings)
-    prob_artist1 = D(G_paintings)
+    prob_artist0 = D(artist_paintings) #D希望将其识别为1
+    prob_artist1 = D(G_paintings) #D希望将其识别为0
     
     D_loss = - torch.mean(torch.log(prob_artist0) + torch.log(1 - prob_artist1))
+    #最大化D猜测的正确率(最大化D将目标数据识别为1，将生成数据识别为0的概率)
+    
     G_loss = torch.mean(torch.log(1 - prob_artist1))
+    #最小化D猜测G生成数据的正确率(最小化D将生成数据识别为0的概率)
     
     #反向传播
     opt_D.zero_grad()
