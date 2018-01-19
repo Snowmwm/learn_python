@@ -10,8 +10,6 @@ import torch.nn.functional as F
 torch.manual_seed(1)
 lstm = nn.LSTM(3, 3) 
 inputs = [Variable(torch.randn((1, 3))) for _ in range(5)]
-
-
 inputs = torch.cat(inputs).view(len(inputs), 1, -1)
 hidden = (Variable(torch.randn(1, 1, 3)), Variable(torch.randn(1, 1, 3))) # clean out hidden state
 out, hidden = lstm(inputs, hidden)
@@ -93,6 +91,6 @@ for epoch in range(300): # 我们要训练300次，可以根据任务量的大�
         optimizer.step()
      
 # 来检验下模型训练的结果
-inputs = prepare_sequence(training_data[0][0], word_to_ix)
+inputs = prepare_sequence('Everybody ate the apple'.split(), word_to_ix)
 tag_scores = model(inputs)
 print(tag_scores)
