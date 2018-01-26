@@ -4,9 +4,9 @@
 import torch.nn as nn
 
 #判别器
-class discriminator(nn.Module):
+class Discriminator(nn.Module):
     def __init__(self, ndf):
-        super(discriminator, self).__init__()
+        super(Discriminator, self).__init__()
         
         #(batch x 3 x 96 x 96) -> (batch x ndf x 32 x 32)
         self.conv1 = nn.Sequential(
@@ -51,9 +51,9 @@ class discriminator(nn.Module):
         return x
 
 #生成器
-class generator(nn.Module):
+class Generator(nn.Module):
     def __init__(self, input_size, ngf):
-        super(generator, self).__init__()
+        super(Generator, self).__init__()
         
         #输入nz维度的噪声
         #(batch x nz x 1 x 1) -> (batch x ngf*8 x 4 x 4) 

@@ -5,10 +5,8 @@ import torch.utils.data as Data
 import torchvision
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
-import os
-import matplotlib.pyplot as plt
 
-from model import discriminator, generator
+from model import Discriminator, Generator
 
 #超参数设置
 EPOCH = 200
@@ -26,10 +24,6 @@ torch.manual_seed(SEED)
 if use_gpu:
     torch.cuda.manual_seed(SEED)
 
-#图片保存路径
-if not os.path.exists('./img'):
-    os.mkdir('./img')
-    
 #加载数据集
 path = './data'
 transforms = transforms.Compose([
@@ -37,17 +31,17 @@ transforms = transforms.Compose([
                 transforms.CenterCrop(96),
                 transforms.ToTensor(),
                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-                                    ])
+                ])
 dataset = torchvision.datasets.ImageFolder(path,transform=transforms)
-dataloader = Data.DataLoader(dataset,
-                             batch_size = BATCH_SIZE,
-                             shuffle = True,
-                             num_workers = 0,
-                             drop_last=True
-                             )
+dataloader = Data.DataLoader(dataset, batch_size = BATCH_SIZE,
+                             shuffle = True, num_workers = 0, drop_last=True)
 
-D = discriminator(64)
-G = generator(ZDIM, 64)
+#搭建神经网络
+D = Discriminator(64)
+G = Generator(ZDIM, 64)
+
+#D.load_state_dict(torch.load('discriminator_9.pkl'))
+#G.load_state_dict(torch.load('generator_9.pkl'))
 
 loss_func = nn.BCELoss() #二分类的交叉熵
 d_optimizer = torch.optim.Adam(D.parameters(), lr=LR, betas=(0.5,0.999))
@@ -66,6 +60,8 @@ if use_gpu: #将模型和数据移至GPU
     z1 = z.cuda()
 
 for epoch in range(EPOCH):
+    running_d_loss = 0.0
+    running_g_loss = 0.0
     for i, (img, _) in enumerate(dataloader):
         real_img = Variable(img) #将真实图片包装成Variable
         if use_gpu:
@@ -86,7 +82,9 @@ for epoch in range(EPOCH):
             d_loss_fake.backward() #反向传播
             
             d_optimizer.step() #参数更新
+            
             d_loss = d_loss_real + d_loss_fake
+            running_d_loss += d_loss.data[0]
 
         # 训练生成网络G
         if (i + 1) % G_EVERY == 0:
@@ -94,6 +92,8 @@ for epoch in range(EPOCH):
             fake_img = G(z) #生成假的图片
             output = D(fake_img) #经过判别器得到结果
             g_loss = loss_func(output, real_label) #生成网络G的loss
+            
+            running_g_loss += g_loss.data[0]
 
             g_optimizer.zero_grad()
             g_loss.backward()
@@ -101,13 +101,14 @@ for epoch in range(EPOCH):
 
         if (i + 1) % 400 == 0:
             print('Epoch:', epoch+1, ' Batch:', i+1, 
-                ' d_loss:%.5f' %d_loss.data[0], ' g_loss:%.5f' %g_loss.data[0])
+                ' d_loss:%.5f' %(running_d_loss/(BATCH_SIZE*i)), 
+                ' g_loss:%.5f' %(running_g_loss/(BATCH_SIZE*i)))
 
-    fake_images = G(z1) #用相同的噪声z1生成假的图片,便于对比
-    fake_images = fake_images.cpu().data
-    save_image(fake_images, './img/fake_images_{}.png'.format(epoch + 1))
+    fake_images = G(z1).cpu().data #用相同的噪声z1生成假的图片,便于对比
+    save_image(fake_images, './img/fake_images_%s.png' %(epoch+1),
+               normalize=True, range=(-1,1))
     
-    if (epoch < 10) or ((epoch + 1) % 10 == 0):
-        torch.save(G.state_dict(), './generator_%s.pkl' %epoch)
-        torch.save(D.state_dict(), './discriminator_%s.pkl' %epoch)
+    if (epoch + 1) % SAVE_EVERY == 0:
+        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+1))
+        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+1))
       

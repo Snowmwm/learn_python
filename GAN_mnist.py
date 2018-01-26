@@ -205,15 +205,15 @@ for epoch in range(EPOCH):
         g_optimizer.step()
 
         if (i + 1) % 400 == 0:
-            print('Epoch: {},Batch: {}, d_loss: {:.6f}, g_loss: {:.6f} '
-                  'D real: {:.6f}, D fake: {:.6f}'.format(
+            print('Epoch: {},Batch: {}, d_loss: {:.3f}, g_loss: {:.3f} '
+                  'D real: {:.3f}, D fake: {:.3f}'.format(
                       epoch+1, i+1, d_loss.data[0], g_loss.data[0],
                       real_scores.data.mean(), fake_scores.data.mean()))
     if epoch == 0:
         real_images = to_img(real_img.cpu().data)
         save_image(real_images, './img/real_images.png')
 
-    if (epoch + 1) % 10 == 0:
+    if (epoch < 10) or ((epoch + 1) % 10 == 0):
         fake_images = to_img(fake_img.cpu().data)
         save_image(fake_images, './img/cnn_fake_images_{}.png'.format(epoch + 1))
 
