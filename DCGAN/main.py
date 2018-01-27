@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -40,8 +43,8 @@ dataloader = Data.DataLoader(dataset, batch_size = BATCH_SIZE,
 D = Discriminator(64)
 G = Generator(ZDIM, 64)
 
-#D.load_state_dict(torch.load('discriminator_9.pkl'))
-#G.load_state_dict(torch.load('generator_9.pkl'))
+D.load_state_dict(torch.load('./checkpoints/D_70.pkl'))
+G.load_state_dict(torch.load('./checkpoints/G_70.pkl'))
 
 loss_func = nn.BCELoss() #二分类的交叉熵
 d_optimizer = torch.optim.Adam(D.parameters(), lr=LR, betas=(0.5,0.999))
@@ -105,10 +108,10 @@ for epoch in range(EPOCH):
                 ' g_loss:%.5f' %(running_g_loss/(BATCH_SIZE*i)))
 
     fake_images = G(z1).cpu().data #用相同的噪声z1生成假的图片,便于对比
-    save_image(fake_images, './img/fake_images_%s.png' %(epoch+1),
+    save_image(fake_images, './img/fake_images_%s.png' %(epoch+71),
                normalize=True, range=(-1,1))
     
     if (epoch + 1) % SAVE_EVERY == 0:
-        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+1))
-        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+1))
+        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+71))
+        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+71))
       
