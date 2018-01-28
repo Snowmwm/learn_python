@@ -6,6 +6,7 @@
 *.json
 *.ttf
 *.pkl
+*.pth
 
 __pycache__/
 templates/
