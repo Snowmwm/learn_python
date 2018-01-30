@@ -7,6 +7,7 @@
 *.ttf
 *.pkl
 *.pth
+*.zip
 
 __pycache__/
 templates/
