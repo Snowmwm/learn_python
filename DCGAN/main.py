@@ -43,8 +43,8 @@ dataloader = Data.DataLoader(dataset, batch_size = BATCH_SIZE,
 D = Discriminator(64)
 G = Generator(ZDIM, 64)
 
-D.load_state_dict(torch.load('./checkpoints/D_70.pkl'))
-G.load_state_dict(torch.load('./checkpoints/G_70.pkl'))
+D.load_state_dict(torch.load('./checkpoints/D_130.pkl'))
+G.load_state_dict(torch.load('./checkpoints/G_130.pkl'))
 
 loss_func = nn.BCELoss() #二分类的交叉熵
 d_optimizer = torch.optim.Adam(D.parameters(), lr=LR, betas=(0.5,0.999))
@@ -103,15 +103,15 @@ for epoch in range(EPOCH):
             g_optimizer.step()
 
         if (i + 1) % 400 == 0:
-            print('Epoch:', epoch+1, ' Batch:', i+1, 
+            print('Epoch:', epoch+131, ' Batch:', i+1, 
                 ' d_loss:%.5f' %(running_d_loss/(BATCH_SIZE*i)), 
                 ' g_loss:%.5f' %(running_g_loss/(BATCH_SIZE*i)))
 
     fake_images = G(z1).cpu().data #用相同的噪声z1生成假的图片,便于对比
-    save_image(fake_images, './img/fake_images_%s.png' %(epoch+71),
+    save_image(fake_images, './img/fake_images_%s.png' %(epoch+131),
                normalize=True, range=(-1,1))
     
     if (epoch + 1) % SAVE_EVERY == 0:
-        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+71))
-        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+71))
+        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+131))
+        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+131))
       

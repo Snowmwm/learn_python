@@ -27,7 +27,7 @@ STYLE_WEIGHT = 1e10
 DATA_PATH = 'C:/PTW/learn_python/DCGAN/data' #训练数据文件夹
 MODEL_PATH = './checkpoints/transformer.pth' #模型存放路径
 STYLE_PATH = './img/style1.jpg' #风格图片存放路径
-CONTENT_PATH = './img/input2.jpg' #内容图片存放路径
+CONTENT_PATH = './img/fake_images_200.png' #内容图片存放路径
 OUTPUT_PATH = './img/output1.png'
 
 
@@ -139,6 +139,6 @@ def stylize(**kwargs):
     save_image(((output_data/255)).clamp(min=0,max=1),OUTPUT_PATH)
             
 if __name__ == '__main__':
-    train()
+   # train()
     stylize()
 
