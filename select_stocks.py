@@ -111,8 +111,8 @@ def choose(context, bar_dict):
 def filterStk(stk, bar_dict, context):
     """过滤涨跌停股票"""
     yesterday = history_bars(stk, 2,'1d', 'close')[-1]
-    zt = round(1.10 * yesterday,2)
-    dt = round(0.97 * yesterday,2)
+    zt = round(1.1 * yesterday,2)
+    dt = round(0.9 * yesterday,2)
     if dt < bar_dict[stk].close < zt:
         return True
     else: 
@@ -126,6 +126,7 @@ def select(context, bar_dict):
     stockList = context.stocks
     #过滤涨跌停股票
     #stockList = [stk for stk in stockList if filterStk(stk,bar_dict,context)]
+    
     context.stocks = []
     #对于stockList中的每只股票
     for stock in stockList:

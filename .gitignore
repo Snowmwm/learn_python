@@ -8,6 +8,7 @@
 *.pkl
 *.pth
 *.zip
+*.ipynb
 
 __pycache__/
 templates/
@@ -15,6 +16,7 @@ mnist/
 cifar10/
 other/
 sklearn/
+.ipynb_checkpoints/
 
 test.db
 sina.html

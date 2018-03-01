@@ -18,18 +18,18 @@ LR = 1e-3
 SEED = 666
 USE_GPU = False
 
-PRINT_EVERY = 300 #每150个batch打印一次
+PRINT_EVERY = 300 #每300个batch打印一次
 SAVE_EVERY = 1 #每1个epoch保存一次模型
-NE = 2 #已经训练的波数
-MODEL_PATH = './checkpoints/tang_2.pth'#预训练模型路径
+NE = 201 #已经训练的波数
+MODEL_PATH = './checkpoints/tang_201.pth'#预训练模型路径
 MODEL_PREFIX = './checkpoints/tang' #模型保存路径
 
 #生成诗歌相关配置
 TRAIN = True #是否训练
 ACROSTIC = True #是否藏头诗
 MAX_GEN_LEN = 60 #生成诗歌最长长度
-PREFIX_WORDS = '江流天地外，山色有无中' #意境
-START_WORDS = '深度学习' #开头
+PREFIX_WORDS = '江流天地外，山色无有中。' 
+START_WORDS = '深度学习' 
 
 
 #随机种子设置
@@ -151,7 +151,7 @@ def gen_acrostic(model,start_words,ix2word,word2ix,prefix_words=None):
 
     for i in range(MAX_GEN_LEN):
         output,hidden = model(input,hidden)
-        top_index  = output.data[0].topk(1)[1][0]
+        top_index = output.data[0].topk(1)[1][0]
         w = ix2word[top_index]
 
         if (pre_word  in {u'。',u'！','<START>'} ):
