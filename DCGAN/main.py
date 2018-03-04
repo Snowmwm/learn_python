@@ -9,17 +9,21 @@ import torchvision
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
 
-from model import Discriminator, Generator
+from model import Discriminator, Generator, Generator_2
 
 #超参数设置
 EPOCH = 200
 BATCH_SIZE = 32
 ZDIM = 100 #噪声维度
 SEED = 666
-LR = 0.0002
+LR = 0.0003
 D_EVERY = 1
-G_EVERY = 5 #每5个batch训练一次生成器
-SAVE_EVERY = 10 #每10个epoch保存一次模型
+G_EVERY = 3 
+SAVE_EVERY = 10 
+
+N_EPOCH = 11
+MODEL_PATH_D = './checkpoints/D_200.pkl' 
+MODEL_PATH_G = './checkpoints/G_uc_10.pkl'
 
 #随机种子设置
 use_gpu = torch.cuda.is_available()
@@ -41,12 +45,17 @@ dataloader = Data.DataLoader(dataset, batch_size = BATCH_SIZE,
 
 #搭建神经网络
 D = Discriminator(64)
-G = Generator(ZDIM, 64)
+G = Generator_2(ZDIM, 64)
 
-D.load_state_dict(torch.load('./checkpoints/D_130.pkl'))
-G.load_state_dict(torch.load('./checkpoints/G_130.pkl'))
+#加载模型参数
+if MODEL_PATH_D:
+    D.load_state_dict(torch.load(MODEL_PATH_D))
+    
+if MODEL_PATH_G:
+    G.load_state_dict(torch.load(MODEL_PATH_G))
 
 loss_func = nn.BCELoss() #二分类的交叉熵
+
 d_optimizer = torch.optim.Adam(D.parameters(), lr=LR, betas=(0.5,0.999))
 g_optimizer = torch.optim.Adam(G.parameters(), lr=LR, betas=(0.5,0.999))
 
@@ -103,15 +112,15 @@ for epoch in range(EPOCH):
             g_optimizer.step()
 
         if (i + 1) % 400 == 0:
-            print('Epoch:', epoch+131, ' Batch:', i+1, 
+            print('Epoch:', epoch+N_EPOCH, ' Batch:', i+1, 
                 ' d_loss:%.5f' %(running_d_loss/(BATCH_SIZE*i)), 
                 ' g_loss:%.5f' %(running_g_loss/(BATCH_SIZE*i)))
 
     fake_images = G(z1).cpu().data #用相同的噪声z1生成假的图片,便于对比
-    save_image(fake_images, './img/fake_images_%s.png' %(epoch+131),
+    save_image(fake_images, './img_uc/fake_images_%s.png' %(epoch+N_EPOCH),
                normalize=True, range=(-1,1))
     
     if (epoch + 1) % SAVE_EVERY == 0:
-        torch.save(G.state_dict(), './checkpoints/G_%s.pkl' %(epoch+131))
-        torch.save(D.state_dict(), './checkpoints/D_%s.pkl' %(epoch+131))
+        torch.save(G.state_dict(), './checkpoints/G_uc_%s.pkl' %(epoch+N_EPOCH))
+        torch.save(D.state_dict(), './checkpoints/D_uc_%s.pkl' %(epoch+N_EPOCH))
       

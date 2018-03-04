@@ -5,26 +5,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-#反卷积层
-class UpsampleConvLayer(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size,
-                stride, upsample=2):
-        super(UpsampleConvLayer, self).__init__()
-        #先上采样，然后再卷积
-        self.upsample_layer = nn.Upsample(scale_factor=upsample)
-        reflection_padding = int(np.floor(kernel_size / 2))
-        self.reflection_pad = nn.ReflectionPad2d(reflection_padding)
-        self.conv2d = nn.Conv2d(in_channels, out_channels, kernel_size, stride)
-
-    def forward(self, x):
-        x_in = x
-        x_in = self.upsample_layer(x_in)
-        out = self.reflection_pad(x_in)
-        out = self.conv2d(out)
-        return out
         
-        
-#使用Localconv的反卷积层
+#使用Localconv的上采样卷积层
 class LocalUpsampleConvLayer(nn.Module):
     def __init__(self, in_height, in_width, in_channels, out_channels, 
                 kernel_size, stride, upsample=2):
@@ -127,23 +109,25 @@ class Generator(nn.Module):
             )
             
         #(batch x ngf*2 x 16 x 16)  -> (batch x ngf x 32 x 32)
-        self.uc1 = nn.Sequential(
-            UpsampleConvLayer(ngf*2, ngf, kernel_size=3, stride=1, upsample=2),
+        self.luc4 = nn.Sequential(
+            LocalUpsampleConvLayer(16, 16, ngf*2, ngf, kernel_size=3, 
+                                    stride=1, upsample=2),
             nn.InstanceNorm2d(64,affine=True),
             nn.ReLU(True),
             )
             
         #(batch x ngf x 32 x 32)  -> (batch x 3 x 96 x 96)
-        self.uc2 = nn.Sequential(
-            UpsampleConvLayer(ngf, 3, kernel_size=5, stride=1, upsample=3),
+        self.luc5 = nn.Sequential(
+            LocalUpsampleConvLayer(32, 32, ngf, 3, kernel_size=5, 
+                                    stride=1, upsample=3),
             nn.Tanh(),
             )
     def forward(self, x):
         x = self.luc1(x)
         x = self.luc2(x)
         x = self.luc3(x)
-        x = self.uc1(x)
-        x = self.uc2(x)
+        x = self.luc4(x)
+        x = self.luc5(x)
         return x
         
         

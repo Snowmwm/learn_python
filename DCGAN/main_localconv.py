@@ -113,10 +113,10 @@ for epoch in range(EPOCH):
                 ' g_loss:%.5f' %(running_g_loss/(BATCH_SIZE*i)))
 
     fake_images = G(z1).cpu().data #用相同的噪声z1生成假的图片,便于对比
-    save_image(fake_images, './img_localconv/fake_images_%s.png' %(epoch+131),
+    save_image(fake_images, './img_localconv/fake_images_%s.png' %(epoch+1),
                normalize=True, range=(-1,1))
     
     if (epoch + 1) % SAVE_EVERY == 0:
-        torch.save(G.state_dict(), './checkpoints/G_local_%s.pkl' %(epoch+131))
-        torch.save(D.state_dict(), './checkpoints/D_local_%s.pkl' %(epoch+131))
+        torch.save(G.state_dict(), './checkpoints/G_local_%s.pkl' %(epoch+1))
+        torch.save(D.state_dict(), './checkpoints/D_local_%s.pkl' %(epoch+1))
       
