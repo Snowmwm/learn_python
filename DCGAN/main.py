@@ -21,9 +21,9 @@ D_EVERY = 1
 G_EVERY = 3 
 SAVE_EVERY = 10 
 
-N_EPOCH = 11
-MODEL_PATH_D = './checkpoints/D_200.pkl' 
-MODEL_PATH_G = './checkpoints/G_uc_10.pkl'
+N_EPOCH = 91
+MODEL_PATH_D = './checkpoints/D_uc_90.pkl' 
+MODEL_PATH_G = './checkpoints/G_uc_90.pkl'
 
 #随机种子设置
 use_gpu = torch.cuda.is_available()

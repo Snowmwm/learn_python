@@ -16,7 +16,7 @@ print(f)
 '''
 
 #array属性
-
+'''
 array = np.array([[1,2,3],
                 [2,3,4]])
 print(array)
@@ -26,7 +26,7 @@ print('size:', array.size)
 
 a = np.array([0,1,2,3])
 print(a[:1])
-
+'''
 #numpy基础运算
 '''
 a = np.array([[10,20],[30,40]])
